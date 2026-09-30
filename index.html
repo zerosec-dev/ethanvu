@@ -4,12 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ethan's blog</title>
-  <link rel="stylesheet" href="style.css">
+  <!-- Use ./style.css instead of absolute /style.css -->
+  <link rel="stylesheet" href="./style.css">
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      fetch("sidebar.html")
-        .then(res => res.text())
-        .then(html => { document.getElementById("sidebar").innerHTML = html; })
+      // Use ./sidebar.html and verify the response status
+      fetch("./sidebar.html")
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.text();
+        })
+        .then(html => { 
+          document.getElementById("sidebar").innerHTML = html; 
+        })
         .catch(err => console.error("Could not load sidebar:", err));
     });
   </script>
@@ -18,7 +25,7 @@
 
   <div id="container">
     <header>
-      <h1><a href="index.html">Ethan's blog</a></h1>
+      <h1><a href="./index.html">Ethan's blog</a></h1>
       <div class="subtitle">ethanvu.com/blog &mdash; Systems security, observability, and data engineering</div>
     </header>
 
@@ -28,22 +35,19 @@
 
       <!-- Feed / Homepage Content -->
       <main>
-        <!-- Latest Post Entry -->
         <article class="post">
-          <h2 class="post-title"><a href="zero-trust.html">What is Zero Trust?</a></h2>
+          <h2 class="post-title"><a href="./zero-trust.html">What is Zero Trust?</a></h2>
           <div class="post-meta">Posted on 30 Sep 2026 by Ethan Vu</div>
 
           <div class="post-body">
             <p>
-              Perimeter-based network security is no longer sufficient in distributed cloud environments. Zero Trust operates on the principle of "never trust, always verify" — enforcing continuous identity verification, least-privilege access, and micro-segmentation.
+              Perimeter-based network security is no longer sufficient in distributed cloud environments. Zero Trust operates on the principle of "never trust, always verify" &mdash; enforcing continuous identity verification, least-privilege access, and micro-segmentation.
             </p>
             <p>
-              <a href="zero-trust.html">Read full article &rarr;</a>
+              <a href="./zero-trust.html">Read full article &rarr;</a>
             </p>
           </div>
         </article>
-
-        <!-- Second / Older Post Entry -->
       </main>
     </div>
 
