@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Title &mdash; Ethan's blog</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("sidebar.html")
+        .then(res => res.text())
+        .then(html => { document.getElementById("sidebar").innerHTML = html; })
+        .catch(err => console.error("Could not load sidebar:", err));
+    });
+  </script>
+</head>
+<body>
+
+  <div id="container">
+    <header>
+      <h1><a href="index.html">Ethan's blog</a></h1>
+      <div class="subtitle">ethanvu.com/blog &mdash; Systems security, observability, and data engineering</div>
+    </header>
+
+    <div id="layout">
+      <!-- Injected automatically from sidebar.html -->
+      <aside id="sidebar"></aside>
+
+      <!-- Post Content -->
+      <main>
+        <article class="post">
+          <h2 class="post-title"><a href="#">Post Title Here</a></h2>
+          <div class="post-meta">Posted on 30 Sep 2026 by Ethan Vu</div>
+
+          <div class="post-body">
+            <p>Write your introduction paragraph here.</p>
+
+            <h2>Section Heading</h2>
+            <p>Write body text here. You can reference inline code with <code>command_name</code>.</p>
+
+            <pre># Shell or terminal block example
+curl -s https://example.com</pre>
+
+            <div class="figure">
+              <div class="placeholder">[ Diagram or Visualization Area ]</div>
+              <div class="figure-caption">Figure 1: Diagram description.</div>
+            </div>
+
+            <h2>Summary</h2>
+            <p>Concluding remarks go here.</p>
+          </div>
+        </article>
+      </main>
+    </div>
+
+    <footer>
+      Copyright &copy; 2026 Ethan Vu. All rights reserved. Powered by flat HTML and text.
+    </footer>
+  </div>
+
+</body>
+</html>
