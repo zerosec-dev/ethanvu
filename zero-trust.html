@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero Trust: How the Internet Spent 40 Years Trusting the Wrong Thing &mdash; Ethan's blog</title>
+  <link rel="stylesheet" href="./style.css">
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch("./sidebar.html")
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.text();
+        })
+        .then(html => {
+          document.getElementById("sidebar").innerHTML = html;
+        })
+        .catch(err => console.error("Could not load sidebar:", err));
+    });
+  </script>
+</head>
+<body>
+
+  <div id="container">
+    <header>
+      <h1><a href="./index.html">Ethan's blog</a></h1>
+      <div class="subtitle">ethanvu.com/blog &mdash; Systems security, observability, and data engineering</div>
+    </header>
+
+    <div id="layout">
+      <aside id="sidebar"></aside>
+
+      <main>
+        <article class="post">
+          <h1 class="post-title">Zero Trust: How the Internet Spent 40 Years Trusting the Wrong Thing</h1>
+          <div class="post-meta">Posted on 30 Sep 2026 by Ethan Vu</div>
+
+          <div class="post-body">
+            <p>There was a time when your bank put your login in the address bar. Copy the link, send it to a friend, and they were in your account. Sounds insane now. But it's a small version of a mistake the internet has been making since the day it was built, and zero trust is what came out of finally dealing with it.</p>
+            <p>The short answer is Operation Aurora, 2009-10. The longer answer is what set it up.</p>
+
+            <h2>Built for a room full of friends</h2>
+            <p>TCP/IP came out of Vint Cerf and Bob Kahn's 1974 paper, got standardized in '81 (RFC 791 and 793), and ARPANET switched over on Jan 1 '83. The users were a few thousand researchers who mostly knew each other, so there's no identity built in at all. A packet has a source address but nothing checks it, you can write whatever you want there. No encryption either. And software trusted it anyway. Unix tools like rsh and rlogin basically let you skip the password if you came from an IP on a trust list.</p>
+            <p>Best known example of how that goes wrong is the Morris worm, Nov '88. It used sendmail and finger bugs to get onto one machine, then those trust lists to hop to the next. Hit something like 6,000 machines, roughly a tenth of the internet (a guess, nobody actually counted). Mitnick did the IP spoofing version by hand on Christmas '94.</p>
+
+            <h2>So they built a wall</h2>
+            <p>The fix everyone landed on was don't bother securing every machine, just guard the way in. DEC sold one of the first commercial firewalls in '91. Bill Cheswick at Bell Labs described the result in 1990 as a crunchy shell around a soft chewy center, which later became the standard insult for it. Check Point added stateful inspection in '94, meaning the firewall remembers what the inside started and drops anything unsolicited.</p>
+            <p>Then NAT ('94, RFC 1631), which was actually about running out of addresses, since IPv4 only has about 4.3B total. It lets a whole office share one public IP. Side effect is unsolicited traffic from outside has nowhere to go and gets dropped, so people started calling it security. It isn't, it inspects nothing. But it locked in the idea that inside means safe.</p>
+
+            <h2>The web punches a hole in it</h2>
+            <p>Mosaic '93, Netscape '94. Companies had to open ports 80 and 443, and a firewall only sees address and port, not what's inside the conversation. So attacks just moved into the web traffic. SQL injection got written up publicly in '98, the Samy worm hit over a million MySpace profiles in about 20 hours in '05. SSL ('95) then encrypted everything, good for users, blinded the firewall.</p>
+            <p>Logins had their own mess, and this is where the bank thing comes from. HTTP doesn't remember you between clicks, so after login the server hands you a random string called a session ID, and whoever holds it is you. In the late 90s lots of people had cookies switched off over privacy worries, so Java and PHP put the ID in the URL instead, like <code>bank.com/account;jsessionid=A8F3...</code> Paste that link to a friend and they're in. It sat in the library computer's history, in proxy logs, and got sent to any outside site you clicked through to. Some systems made IDs in sequence, so edit a few characters and you're in a stranger's session.</p>
+            <p>The "change the URL, see someone else's account" thing is usually a separate bug though. Citi 2011, attackers logged in with a valid account and swapped the account number in the URL. Server checked you were logged in, never checked it was your account. About 360,000 accounts, about $2.7M stolen. Same root as the IP problem, the server trusting whatever the client sends.</p>
+
+            <h2>The soft middle</h2>
+            <p>Meanwhile the inside stayed soft. Attackers stopped hitting the wall and sent phishing emails instead, got one laptop, then moved sideways. Pass-the-hash ('97) and Mimikatz ('11) made it easy to steal Windows logins off one machine and use them on the next. Target '13 got in with an HVAC contractor's credentials and walked out with 40M card numbers.</p>
+            <p>VPNs made it worse, because remote users got dropped straight inside on one password. Colonial Pipeline '21 was an old VPN account with no MFA. About 5 days shut down, about $4.4M ransom.</p>
+
+            <h2>Google gets hacked</h2>
+            <p>What actually set off zero trust was Aurora. In Jan 2010 Google disclosed that attackers based in China got in through an Internet Explorer zero-day and hit at least 20 other big companies. Google's answer was BeyondCorp: kill the VPN, put internal apps behind a proxy on the open internet, and check the user and the device on every request. Office or coffee shop, no difference.</p>
+            <p>Same year John Kindervag at Forrester named it zero trust in a report titled "No More Chewy Centers." NIST wrote it up as SP 800-207 in Aug 2020. After SolarWinds (backdoored update pushed to about 18,000 customers, Dec 2020) and Colonial, Biden's EO 14028 in May '21 made it federal policy.</p>
+
+            <h2>The attackers followed the keys</h2>
+            <p>Once the network stopped mattering, attackers just went after identity. Uber '22 was MFA push spam plus a fake IT guy on WhatsApp. MGM '23 was a phone call to the help desk. Phishing kits now sit between you and the real login page, let you finish MFA, then grab the session cookie after. Storm-0558 in '23 stole a Microsoft signing key and forged login tokens into email at about 25 orgs, US agencies included.</p>
+
+            <!-- Screenshot cut off here. Paste the rest of the post below. -->
+
+            <p><a class="read-more" href="./index.html">&larr; Back to all posts</a></p>
+          </div>
+        </article>
+      </main>
+    </div>
+
+    <footer>
+      Copyright &copy; 2026 Ethan Vu. All rights reserved. Powered by flat HTML and beer.
+    </footer>
+  </div>
+
+</body>
+</html>
