@@ -32,70 +32,13 @@
 
       <main>
         <article class="post">
-          <h2 class="post-title"><a href="./zero-trust.html">Zero Trust: The evolution of security beyond the perimeter</a></h2>
+          <h2 class="post-title"><a href="./zero-trust.html">Zero Trust: How the Internet Spent 40 Years Trusting the Wrong Thing</a></h2>
           <div class="post-meta">Posted on 30 Sep 2026 by Ethan Vu</div>
 
           <div class="post-body">
-            <p>There was a time when your bank put your login in the address bar. Copy the link, send it to a friend, and they were in your account. Sounds insane now. But it's a small version of a mistake the internet has been making since the day it was built, and zero trust is what came out of finally dealing with it.</p>
-            <p>The short answer is Operation Aurora, 2009-10. The longer answer is what set it up.</p>
+            <p>There was a time when websites, banks included, put your session in the address bar. Copy the link, send it to a friend, and they were in your account until you logged out. Sounds insane now. But it's a small version of a mistake the internet has been making since the day it was built, and zero trust is what came out of finally dealing with it.</p>
+            <p>The short version: the name came from a Forrester analyst in 2010, and the first big working version came from Google after it got hacked in Operation Aurora, 2009-10. The longer version is what set it up.</p>
             <p><a class="read-more" href="./zero-trust.html">Read the full post &rarr;</a></p>
-          </div>
-        </article>
-      </main>
-    </div>
-
-    <footer>
-      Copyright &copy; 2026 Ethan Vu. All rights reserved. Powered by flat HTML and beer.
-    </footer>
-  </div>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ethan's blog</title>
-  <!-- Use ./style.css instead of absolute /style.css -->
-  <link rel="stylesheet" href="./style.css">
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Use ./sidebar.html and verify the response status
-      fetch("./sidebar.html")
-        .then(res => {
-          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-          return res.text();
-        })
-        .then(html => { 
-          document.getElementById("sidebar").innerHTML = html; 
-        })
-        .catch(err => console.error("Could not load sidebar:", err));
-    });
-  </script>
-</head>
-<body>
-
-  <div id="container">
-    <header>
-      <h1><a href="./index.html">Ethan's blog</a></h1>
-      <div class="subtitle">ethanvu.com/blog &mdash; Systems security, observability, and data engineering</div>
-    </header>
-
-    <div id="layout">
-      <!-- Injected from sidebar.html -->
-      <aside id="sidebar"></aside>
-
-      <!-- Feed / Homepage Content -->
-      <main>
-        <article class="post">
-          <h2 class="post-title"><a href="./zero-trust.html">What is Zero Trust?</a></h2>
-          <div class="post-meta">Posted on 30 Sep 2026 by Ethan Vu</div>
-
-          <div class="post-body">
-            <p>
-              Perimeter-based network security is no longer sufficient in distributed cloud environments. Zero Trust operates on the principle of "never trust, always verify" &mdash; enforcing continuous identity verification, least-privilege access, and micro-segmentation.
-            </p>
           </div>
         </article>
       </main>
