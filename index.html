@@ -3,19 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ethan's blog</title>
+  <title>Ethan Vu | Zero Trust Engineer &amp; Founder of ZeroSec Solutions</title>
+  <meta name="description" content="Ethan Vu is a zero trust security engineer and founder of ZeroSec Solutions, writing about security monitoring, automated response, SIEM, PKI, and zero trust for OT, defense, and disconnected networks.">
+  <meta name="author" content="Ethan Vu">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ethanvu.com/blog/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ethan Vu">
+  <meta property="og:title" content="Ethan Vu | Zero Trust Engineer">
+  <meta property="og:description" content="Security engineer and founder of ZeroSec Solutions. Writing on zero trust, security monitoring, and automated response.">
+  <meta property="og:url" content="https://ethanvu.com/blog/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Ethan Vu | Zero Trust Engineer">
+  <meta name="twitter:description" content="Security engineer and founder of ZeroSec Solutions. Writing on zero trust, security monitoring, and automated response.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://ethanvu.com/#ethan",
+        "name": "Ethan Vu",
+        "jobTitle": "Founder, Zero Trust Engineer",
+        "description": "Security engineer specializing in security monitoring and automated response for secure networks, and founder of ZeroSec Solutions, a zero trust consultancy for OT, defense, and disconnected environments.",
+        "url": "https://ethanvu.com/blog/",
+        "worksFor": { "@type": "Organization", "name": "ZeroSec Solutions" },
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "Western Governors University" },
+          { "@type": "CollegeOrUniversity", "name": "SANS Technology Institute" }
+        ],
+        "hasCredential": ["GSEC", "GCIH", "CASP+", "PenTest+", "SSCP"],
+        "knowsAbout": ["Zero Trust Architecture", "NIST SP 800-207", "DoD Zero Trust Reference Architecture", "SIEM", "Elastic Security", "Security Automation", "Ansible", "Active Directory Tiering", "PKI", "mTLS", "Detection Engineering", "MITRE ATT&CK", "Penetration Testing", "STIG Compliance", "OT Security"]
+      },
+      {
+        "@type": "Blog",
+        "name": "Ethan's blog",
+        "url": "https://ethanvu.com/blog/",
+        "author": { "@id": "https://ethanvu.com/#ethan" }
+      }
+    ]
+  }
+  </script>
+
   <link rel="stylesheet" href="./style.css">
   <script>
+    // Add new post files here, newest first. Each one is pulled in full onto this page.
+    const POSTS = ["zero-trust.html"];
+
     document.addEventListener("DOMContentLoaded", () => {
       fetch("./sidebar.html")
         .then(res => {
           if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
           return res.text();
         })
-        .then(html => {
-          document.getElementById("sidebar").innerHTML = html;
-        })
+        .then(html => { document.getElementById("sidebar").innerHTML = html; })
         .catch(err => console.error("Could not load sidebar:", err));
+
+      const feed = document.getElementById("feed");
+      Promise.all(POSTS.map(file =>
+        fetch("./" + file)
+          .then(res => {
+            if (!res.ok) throw new Error(`${file}: HTTP ${res.status}`);
+            return res.text();
+          })
+          .then(html => {
+            const doc = new DOMParser().parseFromString(html, "text/html");
+            const article = doc.querySelector("article.post");
+            if (!article) throw new Error(`${file}: no <article class="post"> found`);
+
+            // Turn the post's title into a linked h2 for the feed
+            const oldTitle = article.querySelector(".post-title");
+            const title = document.createElement("h2");
+            title.className = "post-title";
+            const link = document.createElement("a");
+            link.href = "./" + file;
+            link.textContent = oldTitle.textContent;
+            title.appendChild(link);
+            oldTitle.replaceWith(title);
+
+            // Drop the "Back to all posts" link
+            article.querySelectorAll(".back-link").forEach(el => el.remove());
+            return article;
+          })
+          .catch(err => {
+            console.error("Could not load post:", err);
+            const fallback = document.createElement("p");
+            fallback.innerHTML = `<a href="./${file}">${file}</a>`;
+            return fallback;
+          })
+      )).then(articles => {
+        feed.replaceChildren(...articles);
+      });
     });
   </script>
 </head>
@@ -30,17 +110,10 @@
     <div id="layout">
       <aside id="sidebar"></aside>
 
-      <main>
-        <article class="post">
-          <h2 class="post-title"><a href="./zero-trust.html">Zero Trust: The evolution of internet security</a></h2>
-          <div class="post-meta">Posted on 30 Sep 2026 by Ethan Vu</div>
-
-          <div class="post-body">
-            <p>There was a time when websites, banks included, put your session in the address bar. Copy the link, send it to a friend, and they were in your account until you logged out. Sounds insane now. But it's a small version of a mistake the internet has been making since the day it was built, and zero trust is what came out of finally dealing with it.</p>
-            <p>The short version: the name came from a Forrester analyst in 2010, and the first big working version came from Google after it got hacked in Operation Aurora, 2009-10. The longer version is what set it up.</p>
-            <p><a class="read-more" href="./zero-trust.html">Read the full post &rarr;</a></p>
-          </div>
-        </article>
+      <main id="feed">
+        <noscript>
+          <p><a href="./zero-trust.html">Zero Trust: How the Internet Spent 40 Years Trusting the Wrong Thing</a></p>
+        </noscript>
       </main>
     </div>
 
